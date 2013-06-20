@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * 1997-2013 Quadra Informatique
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0) that is available
+ * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
+ * If you are unable to obtain it through the world-wide-web, please send an email
+ * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ *
+ *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
+ *  @copyright 1997-2013 Quadra Informatique
+ *  @version Release: $Revision: 2.1.4 $
+ *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+    <modules>
+        <Quadra_Paybox>
+            <version>2.1.4</version>
+        </Quadra_Paybox>
+    </modules>
+    <global>
+        <blocks>
+            <paybox>
+                <class>Quadra_Paybox_Block</class>
+            </paybox>
+        </blocks>
+        <helpers>
+            <paybox>
+                <class>Quadra_Paybox_Helper</class>
+            </paybox>
+        </helpers>
+        <models>
+            <paybox>
+                <class>Quadra_Paybox_Model</class>
+                <resourceModel>paybox_mysql4</resourceModel>
+            </paybox>
+            <paybox_mysql4>
+                <class>Quadra_Paybox_Model_Mysql4</class>
+                <entities>
+                    <api_debug>
+                        <table>paybox_api_debug</table>
+                    </api_debug>
+                    <question_number>
+                        <table>paybox_question_number</table>
+                    </question_number>
+                </entities>
+            </paybox_mysql4>
+        </models>
+        <resources>
+            <paybox_setup>
+                <setup>
+                    <module>Quadra_Paybox</module>
+                    <class>Quadra_Paybox_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </paybox_setup>
+            <paybox_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </paybox_write>
+            <paybox_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </paybox_read>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Quadra_Paybox before="Mage_Adminhtml">Quadra_Paybox_Adminhtml</Quadra_Paybox>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <frontend>
+        <secure_url>
+            <paybox_system>/paybox/system</paybox_system>
+        </secure_url>
+        <layout>
+            <updates>
+                <booking>
+                    <file>paybox.xml</file>
+                </booking>
+            </updates>
+        </layout>
+        <routers>
+            <paybox>
+                <use>standard</use>
+                <args>
+                    <module>Quadra_Paybox</module>
+                    <frontName>paybox</frontName>
+                </args>
+            </paybox>
+        </routers>
+        <translate>
+            <modules>
+                <Quadra_Paybox>
+                    <files>
+                        <default>Quadra_Paybox.csv</default>
+                    </files>
+                </Quadra_Paybox>
+            </modules>
+        </translate>
+        <events>
+            <checkout_controller_multishipping_shipping_post>
+                <observers>
+                    <paybox_multishipping_init_redirect>
+                        <type>model</type>
+                        <class>paybox/observer</class>
+                        <method>initRedirect</method>
+                    </paybox_multishipping_init_redirect>
+                </observers>
+            </checkout_controller_multishipping_shipping_post>
+            <sales_order_place_after>
+                <observers>
+                    <paybox_multishipping_disable_email_for_multishipping>
+                        <type>model</type>
+                        <class>paybox/observer</class>
+                        <method>disableEmailForMultishipping</method>
+                    </paybox_multishipping_disable_email_for_multishipping>
+                </observers>
+            </sales_order_place_after>
+            <checkout_multishipping_controller_success_action>
+                <observers>
+                    <paybox_multishipping_redirect_url>
+                        <type>model</type>
+                        <class>paybox/observer</class>
+                        <method>multishippingRedirectUrl</method>
+                    </paybox_multishipping_redirect_url>
+                </observers>
+            </checkout_multishipping_controller_success_action>
+        </events>
+    </frontend>
+    <adminhtml>
+        <menu>
+            <paybox translate="title">
+                <title>Paybox</title>
+                <sort_order>300</sort_order>
+                <children>
+                    <api_debug translate="title">
+                        <title>Api Debug</title>
+                        <sort_order>10</sort_order>
+                        <action>adminhtml/api_debug</action>
+                    </api_debug>
+                    <question_number translate="title">
+                        <title>Question Number</title>
+                        <sort_order>20</sort_order>
+                        <action>adminhtml/question_number</action>
+                    </question_number>
+                </children>
+            </paybox>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <paybox_design>
+                                            <title>Paybox Design Section</title>
+                                            <sort_order>100</sort_order>
+                                        </paybox_design>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <translate>
+            <modules>
+                <Quadra_Paybox>
+                    <files>
+                        <default>Quadra_Paybox.csv</default>
+                    </files>
+                </Quadra_Paybox>
+            </modules>
+        </translate>
+    </adminhtml>
+    <default>
+        <payment>
+            <paybox_system>
+                <pbx_mode>1</pbx_mode>
+                <pbx_site backend_model="adminhtml/system_config_backend_encrypted"/>
+                <pbx_rang backend_model="adminhtml/system_config_backend_encrypted"/>
+                <pbx_identifiant backend_model="adminhtml/system_config_backend_encrypted"/>
+                <pbx_autoseule>authorize_capture</pbx_autoseule>
+                <pbx_langue>FRA</pbx_langue>
+                <model>paybox/system</model>
+                <title>Paybox System</title>
+                <order_status>processing</order_status>
+                <allowspecific>0</allowspecific>
+                <authorized_ips>
+                    <ip1>195.101.99.76</ip1>
+                    <ip2>194.2.122.158</ip2>
+                </authorized_ips>
+                <key_path>app/code/community/Quadra/Paybox/etc/pubkey.pem</key_path>
+                <empty_cart>1</empty_cart>
+            </paybox_system>
+            <paybox_direct>
+                <pbx_site backend_model="adminhtml/system_config_backend_encrypted"/>
+                <pbx_rang backend_model="adminhtml/system_config_backend_encrypted"/>
+                <pbx_cle backend_model="adminhtml/system_config_backend_encrypted"/>
+                <payment_action>authorize</payment_action>
+                <model>paybox/direct</model>
+                <title>Paybox Direct</title>
+                <useccv>1</useccv>
+                <order_status>processing</order_status>
+                <cctypes>AE,VI,MC,DI</cctypes>
+                <allowspecific>0</allowspecific>
+            </paybox_direct>
+        </payment>
+        <paybox_design>
+            <intermediate_page>
+                <pbx_output>E</pbx_output>
+            </intermediate_page>
+        </paybox_design>
+    </default>
+</config>
