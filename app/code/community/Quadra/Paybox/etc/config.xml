@@ -12,14 +12,14 @@
  *
  *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
  *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.4 $
+ *  @version Release: $Revision: 2.1.5 $
  *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
  */
 -->
 <config>
     <modules>
         <Quadra_Paybox>
-            <version>2.1.4</version>
+            <version>2.1.5</version>
         </Quadra_Paybox>
     </modules>
     <global>
