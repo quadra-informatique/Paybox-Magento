@@ -494,6 +494,9 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
             'PBX_RUF1' => self::PBX_METHOD_CALL,
         );
 
+        if ($fieldsArr['PBX_TOTAL'] < ((int) $this->getConfigData('min_order_total_3ds') * 100))
+            $fieldsArr['PBX_3DS'] = 'N';
+
         if ($this->getQuote()->getIsMultiShipping()) {
             $fieldsArr['PBX_TOTAL'] = (int) ($this->getQuote()->getBaseGrandTotal() * 100);
         }
