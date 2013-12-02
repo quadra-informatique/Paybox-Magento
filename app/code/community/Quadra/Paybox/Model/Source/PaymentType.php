@@ -8,16 +8,17 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-class Quadra_Paybox_Model_Source_PaymentType {
+class Quadra_Paybox_Model_Source_PaymentType
+{
 
-    public function toOptionArray() {
+    public function toOptionArray()
+    {
         return array(
             array('value' => '', 'label' => Mage::helper('paybox')->__('--Please Select--')),
             array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_CARTE, 'label' => Mage::helper('paybox')->__('CARTE')),

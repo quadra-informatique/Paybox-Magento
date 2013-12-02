@@ -8,73 +8,66 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
+class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract
+{
     /**
      * Paybox const variables
      */
-    const PBX_FORM_HTML_METHOD    = 1;
+
+    const PBX_FORM_HTML_METHOD = 1;
     const PBX_COMMAND_LINE_METHOD = 4;
-
     const PBX_METHOD_CALL = 'POST';
-
     const PBX_PAYMENT_ACTION_ATHORIZE = 'O';
     const PBX_PAYMENT_ACTION_ATHORIZE_CAPTURE = 'N';
-
-    const PBX_PAYMENT_TYPE_CARTE    = 'CARTE';
-    const PBX_PAYMENT_TYPE_SYMPASS  = 'SYMPASS';
-    const PBX_PAYMENT_TYPE_PAYNOVA  = 'PAYNOVA';
+    const PBX_PAYMENT_TYPE_CARTE = 'CARTE';
+    const PBX_PAYMENT_TYPE_SYMPASS = 'SYMPASS';
+    const PBX_PAYMENT_TYPE_PAYNOVA = 'PAYNOVA';
     const PBX_PAYMENT_TYPE_TERMINEO = 'TERMINEO';
-    const PBX_PAYMENT_TYPE_PAYPAL   = 'PAYPAL';
-
-    const PBX_CARTE_TYPE_CB                 = 'CB';
-    const PBX_CARTE_TYPE_VISA               = 'VISA';
+    const PBX_PAYMENT_TYPE_PAYPAL = 'PAYPAL';
+    const PBX_CARTE_TYPE_CB = 'CB';
+    const PBX_CARTE_TYPE_VISA = 'VISA';
     const PBX_CARTE_TYPE_EUROCARDMASTERCARD = 'EUROCARD_MASTERCARD';
-    const PBX_CARTE_TYPE_ECARD              = 'E_CARD';
-    const PBX_CARTE_TYPE_AMEX               = 'AMEX';
-    const PBX_CARTE_TYPE_DINERS             = 'DINERS';
-    const PBX_CARTE_TYPE_JCB                = 'JCB';
-    const PBX_CARTE_TYPE_AURORE             = 'AURORE';
-    const PBX_CARTE_TYPE_PAYNOVA            = 'PAYNOVA';
-    const PBX_CARTE_TYPE_TERMINEO           = 'TERMINEO';
-    const PBX_CARTE_TYPE_PAYPAL             = 'PAYPAL';
+    const PBX_CARTE_TYPE_ECARD = 'E_CARD';
+    const PBX_CARTE_TYPE_AMEX = 'AMEX';
+    const PBX_CARTE_TYPE_DINERS = 'DINERS';
+    const PBX_CARTE_TYPE_JCB = 'JCB';
+    const PBX_CARTE_TYPE_AURORE = 'AURORE';
+    const PBX_CARTE_TYPE_PAYNOVA = 'PAYNOVA';
+    const PBX_CARTE_TYPE_TERMINEO = 'TERMINEO';
+    const PBX_CARTE_TYPE_PAYPAL = 'PAYPAL';
 
-    protected $_code  = 'paybox_system';
-
-    protected $_authorized_ips = array('194.2.122.158', '195.101.99.76','195.25.7.166');
-
-    protected $_isGateway               = false;
-    protected $_canAuthorize            = true;
-    protected $_canCapture              = true;
-    protected $_canCapturePartial       = false;
-    protected $_canRefund               = false;
-    protected $_canVoid                 = false;
-    protected $_canUseInternal          = false;
-    protected $_canUseCheckout          = true;
-    protected $_canUseForMultishipping  = true;
-
+    protected $_code = 'paybox_system';
+    protected $_authorized_ips = array('194.2.122.158', '195.101.99.76', '195.25.7.166');
+    protected $_isGateway = false;
+    protected $_canAuthorize = true;
+    protected $_canCapture = true;
+    protected $_canCapturePartial = false;
+    protected $_canRefund = false;
+    protected $_canVoid = false;
+    protected $_canUseInternal = false;
+    protected $_canUseCheckout = true;
+    protected $_canUseForMultishipping = true;
     protected $_formBlockType = 'paybox/system_form';
-
     protected $_quote;
     protected $_order;
     protected $_cartTypes;
     protected $_currenciesNumbers;
-
-    protected $_backupservers   = array();
-    protected $_backuptimeouts 	= array();
+    protected $_backupservers = array();
+    protected $_backuptimeouts = array();
 
     /**
      * Get quote model
      *
      * @return Mage_Sales_Model_Quote
      */
-    public function getQuote() {
+    public function getQuote()
+    {
         if (!$this->_quote) {
             $quoteId = Mage::getSingleton('checkout/session')->getLastQuoteId();
             $this->_quote = Mage::getModel('sales/quote')->load($quoteId);
@@ -87,7 +80,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return Mage_Sales_Model_Order
      */
-    public function getOrder() {
+    public function getOrder()
+    {
         if (!$this->_order) {
             $paymentInfo = $this->getInfoInstance();
             $this->_order = Mage::getModel('sales/order')->loadByIncrementId($paymentInfo->getOrder()->getRealOrderId());
@@ -100,7 +94,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getOrderList() {
+    public function getOrderList()
+    {
         if ($this->getQuote()->getIsMultiShipping())
             return Mage::getSingleton('checkout/session')->getRealOrderIds();
         else
@@ -112,12 +107,14 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @param Mage_Sales_Model_Order $order
      */
-    public function setOrder(Mage_Sales_Model_Order $order) {
+    public function setOrder(Mage_Sales_Model_Order $order)
+    {
         $this->_order = $order;
         return $this;
     }
 
-    public function getAuthorizedIps() {
+    public function getAuthorizedIps()
+    {
         return $this->_authorized_ips;
     }
 
@@ -127,7 +124,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      * @param   string $field
      * @return  mixed
      */
-    public function getDesignConfigData($field, $storeId = null) {
+    public function getDesignConfigData($field, $storeId = null)
+    {
         if (null === $storeId) {
             $storeId = $this->getStore();
         }
@@ -142,7 +140,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      * @param string $paymentType
      * @return array
      */
-    protected function _getCartTypes($paymentType = null) {
+    protected function _getCartTypes($paymentType = null)
+    {
         if (!$this->_cartTypes) {
             $this->_cartTypes = array(
                 self::PBX_PAYMENT_TYPE_CARTE => array(
@@ -194,7 +193,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      * @param string $paymentType
      * @return array
      */
-    public function getCartTypesByPayment($paymentType) {
+    public function getCartTypesByPayment($paymentType)
+    {
         if ($paymentType == '') {
             return array();
         }
@@ -206,7 +206,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getJsonCartTypes() {
+    public function getJsonCartTypes()
+    {
         return Zend_Json::encode($this->_getCartTypes());
     }
 
@@ -215,7 +216,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getPaymentMethod() {
+    public function getPaymentMethod()
+    {
         return $this->getConfigData('pbx_mode');
     }
 
@@ -224,7 +226,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getPayboxFile() {
+    public function getPayboxFile()
+    {
         return $this->getConfigData('pbx_file');
     }
 
@@ -233,7 +236,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getPaymentType() {
+    public function getPaymentType()
+    {
         return $this->getConfigData('pbx_typepaiement');
     }
 
@@ -242,7 +246,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getPaymentAction() {
+    public function getPaymentAction()
+    {
         $paymentAction = $this->getConfigData('pbx_autoseule');
         switch ($paymentAction) {
             case self::ACTION_AUTHORIZE:
@@ -262,7 +267,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getCartType() {
+    public function getCartType()
+    {
         return $this->getConfigData('pbx_typecarte');
     }
 
@@ -271,7 +277,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getSiteNumber() {
+    public function getSiteNumber()
+    {
         return $this->getConfigData('pbx_site');
     }
 
@@ -280,7 +287,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getRang() {
+    public function getRang()
+    {
         return $this->getConfigData('pbx_rang');
     }
 
@@ -289,7 +297,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getIdentifiant() {
+    public function getIdentifiant()
+    {
         return $this->getConfigData('pbx_identifiant');
     }
 
@@ -298,7 +307,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getCurrencyNumber() {
+    public function getCurrencyNumber()
+    {
         $currencyCode = $this->getOrder()->getBaseCurrencyCode();
         if (!$this->_currenciesNumbers) {
             $this->_currenciesNumbers = simplexml_load_file(Mage::getBaseDir() . '/app/code/community/Quadra/Paybox/etc/currency.xml');
@@ -313,7 +323,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getLanguage() {
+    public function getLanguage()
+    {
         return $this->getConfigData('pbx_langue');
     }
 
@@ -322,7 +333,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * QI Marine
      */
-    public function getBackupServer() {
+    public function getBackupServer()
+    {
         $bpserversConfigPath = 'payment/paybox_system/pbx_bpserver';
         $configValueSerialized = Mage::getStoreConfig($bpserversConfigPath, $this->getStore());
 
@@ -352,7 +364,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return unknown
      */
-    public function getApiUrls() {
+    public function getApiUrls()
+    {
         $fielldsArr = array();
         if (($primary = trim($this->getConfigData('pbx_paybox'))) != '') {
             $fielldsArr['PBX_PAYBOX'] = $primary;
@@ -379,7 +392,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return array
      */
-    public function getTimeouts() {
+    public function getTimeouts()
+    {
         $fielldsArr = array();
         if (($timeout = trim($this->getConfigData('pbx_timeout'))) != '') {
             $fielldsArr['PBX_TIMEOUT'] = $timeout;
@@ -404,7 +418,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return array
      */
-    public function getManagementMode() {
+    public function getManagementMode()
+    {
         $fieldsArr = array();
         if (($text = trim($this->getDesignConfigData('pbx_txt'))) != '') {
             $fieldsArr['PBX_TXT'] = utf8_encode($text);
@@ -436,7 +451,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return unknown
      */
-    public function getPingFlag() {
+    public function getPingFlag()
+    {
         return $this->getConfigData('pbx_ping');
     }
 
@@ -445,7 +461,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getPingPort() {
+    public function getPingPort()
+    {
         return $this->getConfigData('pbx_port');
     }
 
@@ -454,11 +471,13 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return string
      */
-    public function getDebugFlag() {
+    public function getDebugFlag()
+    {
         return $this->getConfigData('debug_flag');
     }
 
-    public function getOrderPlaceRedirectUrl() {
+    public function getOrderPlaceRedirectUrl()
+    {
         if ($this->getPaymentMethod() == self::PBX_FORM_HTML_METHOD) {
             return Mage::getUrl('paybox/system/redirect', array('_secure' => true));
         } else {
@@ -471,7 +490,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *
      * @return array
      */
-    public function getFormFields() {
+    public function getFormFields()
+    {
         $fieldsArr = array();
 
         $fieldsArr = array(
@@ -542,7 +562,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      * @param array $response
      * @return bool
      */
-    public function checkResponse($response) {
+    public function checkResponse($response)
+    {
         if ($this->getDebugFlag()) {
             $debug = Mage::getSingleton('paybox/api_debug')
                     ->load($response['ref'], 'real_order_id')
@@ -557,7 +578,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
         return false;
     }
 
-    public function capture(Varien_Object $payment, $amount) {
+    public function capture(Varien_Object $payment, $amount)
+    {
         $payment->setStatus(self::STATUS_APPROVED)
                 ->setLastTransId($this->getTransactionId());
         return $this;
@@ -569,20 +591,23 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      * @param   Varien_Object $info
      * @return  Mage_Payment_Model_Abstract
      */
-    public function validate() {
+    public function validate()
+    {
         $quote = Mage::getSingleton('checkout/session')->getQuote();
         $quote->setCustomerNoteNotify(false);
         parent::validate();
     }
 
-    public function authorize(Varien_Object $payment, $amount) {
+    public function authorize(Varien_Object $payment, $amount)
+    {
         $payment->setStatus(self::STATUS_APPROVED)
                 ->setLastTransId($this->getTransactionId());
 
         return $this;
     }
 
-    public function cancel(Varien_Object $payment) {
+    public function cancel(Varien_Object $payment)
+    {
         $payment->setStatus(self::STATUS_DECLINED);
         return $this;
     }
@@ -593,7 +618,8 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract {
      *  @param    none
      *  @return	  string Failure response string
      */
-    public function getErrorResponse() {
+    public function getErrorResponse()
+    {
         $response = array(
             'Pragma: no-cache',
             'Content-type : text/plain',

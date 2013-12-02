@@ -8,21 +8,22 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
+class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action
+{
 
     protected $_payboxResponse = null;
     protected $_responseStatus = false;
     protected $_realOrderIds;
     protected $_quote;
 
-    public function testAction() {
+    public function testAction()
+    {
         $model = Mage::getModel('paybox/direct')->setRang(10)->setSiteNumber(999988);
         echo "test " . $model->getQuestionNumberModel()->getNextQuestionNumber();
 
@@ -35,7 +36,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *
      * @return Mage_Sales_Model_Quote
      */
-    public function getQuote() {
+    public function getQuote()
+    {
         if (!$this->_quote) {
             $this->_quote = Mage::getModel('sales/quote')->load($this->getCheckout()->getPayboxQuoteId());
 
@@ -55,7 +57,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *
      * @return array
      */
-    public function getRealOrderIds() {
+    public function getRealOrderIds()
+    {
         if (!$this->_realOrderIds) {
             if ($this->_payboxResponse) {
                 $this->_realOrderIds = explode(',', $this->_payboxResponse['ref']);
@@ -66,7 +69,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         return $this->_realOrderIds;
     }
 
-    public function getBaseGrandTotal() {
+    public function getBaseGrandTotal()
+    {
         if ($this->getQuote()->getIsMultiShipping())
             return $this->getQuote()->getBaseGrandTotal();
         else {
@@ -86,7 +90,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * @param array $response
      * @return object $this
      */
-    protected function setPayboxResponse($response) {
+    protected function setPayboxResponse($response)
+    {
         if (count($response)) {
             $this->_payboxResponse = $response;
         }
@@ -98,7 +103,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *
      * @return Quadra_Paybox_Model_System
      */
-    public function getModel() {
+    public function getModel()
+    {
         return Mage::getSingleton('paybox/system');
     }
 
@@ -107,7 +113,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *
      * @return Mage_Checkout_Model_Session
      */
-    public function getCheckout() {
+    public function getCheckout()
+    {
         return Mage::getSingleton('checkout/session');
     }
 
@@ -115,7 +122,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * Redirect action. Redirect customer to Paybox
      *
      */
-    public function redirectAction() {
+    public function redirectAction()
+    {
         $session = $this->getCheckout();
         $session->setPayboxQuoteId($session->getLastQuoteId());
 
@@ -134,15 +142,15 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         $session->setPayboxOrderId(Mage::helper('core')->encrypt(implode(',', $realOrderIds)));
         $session->setPayboxPaymentAction(
                 $order->getPayment()
-                      ->getMethodInstance()
-                      ->getPaymentAction()
+                        ->getMethodInstance()
+                        ->getPaymentAction()
         );
 
         $this->getResponse()->setBody(
                 $this->getLayout()
-                     ->createBlock('paybox/system_redirect')
-                     ->setOrder($order)
-                     ->toHtml()
+                        ->createBlock('paybox/system_redirect')
+                        ->setOrder($order)
+                        ->toHtml()
         );
 
         $session->unsQuoteId();
@@ -151,7 +159,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
     /**
      * Customer returning to this action if payment was successe
      */
-    public function successAction() {
+    public function successAction()
+    {
         $model = $this->getModel();
         $this->setPayboxResponse($this->getRequest()->getParams());
 
@@ -218,7 +227,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
     /**
      * Action when payment was refused by Paybox
      */
-    public function refuseAction() {
+    public function refuseAction()
+    {
         $model = $this->getModel();
 
         $this->setPayboxResponse($this->getRequest()->getParams());
@@ -258,7 +268,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
     /**
      * Action when customer cancels payment or press button to back to shop
      */
-    public function declineAction() {
+    public function declineAction()
+    {
         $model = $this->getModel();
         $this->setPayboxResponse($this->getRequest()->getParams());
 
@@ -268,8 +279,7 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
                 $order = Mage::getModel('sales/order')->loadByIncrementId($realOrderId);
 
                 $order->addStatusToHistory(
-                    $model->getConfigData('order_status_payment_canceled'),
-                    $this->__('The order was canceled by the customer.')
+                        $model->getConfigData('order_status_payment_canceled'), $this->__('The order was canceled by the customer.')
                 );
 
                 if ($model->getConfigData('order_status_payment_canceled') == Mage_Sales_Model_Order::STATE_CANCELED && $order->canCancel()) {
@@ -305,7 +315,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * Redirect action. Redirect to Paybox using commandline mode
      *
      */
-    public function commandlineAction() {
+    public function commandlineAction()
+    {
         $session = $this->getCheckout();
         $session->setPayboxQuoteId($session->getQuoteId());
 
@@ -373,7 +384,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * Error action. If request params to Paybox has mistakes
      *
      */
-    public function errorAction() {
+    public function errorAction()
+    {
         if (!$this->getCheckout()->getPayboxQuoteId()) {
             $this->norouteAction();
             return;
@@ -395,7 +407,7 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         $this->loadLayout();
 
         $this->getCheckout()
-             ->setPayboxErrorNumber($this->getRequest()->getParam('NUMERR'));
+                ->setPayboxErrorNumber($this->getRequest()->getParam('NUMERR'));
 
         $this->renderLayout();
     }
@@ -405,7 +417,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * Displaying information if customer was redirecting to cancel or decline actions
      *
      */
-    public function failureAction() {
+    public function failureAction()
+    {
         if (!$this->getCheckout()->getPayboxErrorMessage()) {
             $this->norouteAction();
             return;
@@ -420,7 +433,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *
      * @return unknown
      */
-    protected function _checkResponse() {
+    protected function _checkResponse()
+    {
         if (!$this->getCheckout()->getPayboxQuoteId()) {
             $this->norouteAction();
             return;
@@ -454,7 +468,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      * @param Mage_Sales_Model_Order $order
      * @return bool
      */
-    protected function _createInvoice(Mage_Sales_Model_Order $order) {
+    protected function _createInvoice(Mage_Sales_Model_Order $order)
+    {
         if ($order->canInvoice()) {
             $invoice = $order->prepareInvoice();
             $invoice->register()->capture();
@@ -467,7 +482,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         return false;
     }
 
-    protected function _getSuccessRedirect() {
+    protected function _getSuccessRedirect()
+    {
         if ($this->getQuote()->getIsMultiShipping())
             return 'checkout/multishipping/success';
         else
@@ -480,7 +496,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
      *  @param    none
      *  @return	  void
      */
-    public function notifyAction() {
+    public function notifyAction()
+    {
         $model = $this->getModel();
         $params = $this->getRequest()->getParams();
         $this->setPayboxResponse($params);
@@ -561,7 +578,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         $this->renderLayout();
     }
 
-    protected function _updateOrderState($order, $model) {
+    protected function _updateOrderState($order, $model)
+    {
         if ($this->_payboxResponse['error'] == '00000') {
             // Aucune erreur = paiement paybox accepté
             if ($order->getState() == Mage_Sales_Model_Order::STATE_HOLDED) {
@@ -572,15 +590,14 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
                 $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, $model->getConfigData('order_status_payment_accepted'), $this->__('Payment accepted by Paybox'));
             } else {
                 $order->addStatusToHistory(
-                    $model->getConfigData('order_status_payment_accepted'),
-                    $this->__('Payment accepted by Paybox'), true
+                        $model->getConfigData('order_status_payment_accepted'), $this->__('Payment accepted by Paybox'), true
                 );
             }
 
             if ($order->getPayment()->getMethodInstance()->getPaymentAction() == Quadra_Paybox_Model_System::PBX_PAYMENT_ACTION_ATHORIZE_CAPTURE) {
                 $order->getPayment()
-                      ->getMethodInstance()
-                      ->setTransactionId($this->_payboxResponse['trans']);
+                        ->getMethodInstance()
+                        ->setTransactionId($this->_payboxResponse['trans']);
 
                 // Faut-il créer la facture
                 if ($model->getConfigData('invoice_create')) {
@@ -614,7 +631,8 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action {
         }
     }
 
-    protected function _reorder() {
+    protected function _reorder()
+    {
         $cart = Mage::getSingleton('checkout/cart');
         /* @var $cart Mage_Checkout_Model_Cart */
 

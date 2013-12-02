@@ -8,23 +8,23 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
+class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc
+{
     /**
      * Paybox direct payment actions
      */
+
     const PBX_PAYMENT_ACTION_ATHORIZE = '00001';
     const PBX_PAYMENT_ACTION_DEBIT = '00002';
     const PBX_PAYMENT_ACTION_ATHORIZE_CAPTURE = '00003';
     const PBX_PAYMENT_ACTION_CANCELLATION = '00005';
     const PBX_PAYMENT_ACTION_REFUND = '00004';
-
     const PBX_VERSION = '00103';
 
     /**
@@ -34,22 +34,19 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      */
     const PBX_ACTIVITE_VALUE = '024';
 
-    protected $_code  = 'paybox_direct';
-
-    protected $_isGateway               = true;
-    protected $_canAuthorize            = true;
-    protected $_canCapture              = true;
-    protected $_canCapturePartial       = false;
-    protected $_canRefund               = true;
-    protected $_canVoid                 = false;
-    protected $_canUseInternal          = true;
-    protected $_canUseCheckout          = true;
-    protected $_canUseForMultishipping  = true;
-    protected $_canSaveCc               = true;
-
+    protected $_code = 'paybox_direct';
+    protected $_isGateway = true;
+    protected $_canAuthorize = true;
+    protected $_canCapture = true;
+    protected $_canCapturePartial = false;
+    protected $_canRefund = true;
+    protected $_canVoid = false;
+    protected $_canUseInternal = true;
+    protected $_canUseCheckout = true;
+    protected $_canUseForMultishipping = true;
+    protected $_canSaveCc = true;
     protected $_formBlockType = 'paybox/direct_form';
     protected $_infoBlockType = 'paybox/direct_info';
-
     protected $_order;
     protected $_currenciesNumbers;
     protected $_questionNumberModel;
@@ -61,7 +58,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      * @param integer $recallNumber
      * @return string
      */
-    public function getPayboxUrl($recallNumber) {
+    public function getPayboxUrl($recallNumber)
+    {
         $path = 'pbx_url';
         if ($recallNumber) {
             $path = 'pbx_backupurl';
@@ -75,7 +73,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getPaymentAction() {
+    public function getPaymentAction()
+    {
         $paymentAction = $this->getConfigData('payment_action');
         switch ($paymentAction) {
             case self::ACTION_AUTHORIZE:
@@ -95,7 +94,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getSiteNumber() {
+    public function getSiteNumber()
+    {
         return $this->getConfigData('pbx_site');
     }
 
@@ -104,7 +104,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getRang() {
+    public function getRang()
+    {
         return $this->getConfigData('pbx_rang');
     }
 
@@ -113,7 +114,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getCleNumber() {
+    public function getCleNumber()
+    {
         return $this->getConfigData('pbx_cle');
     }
 
@@ -122,7 +124,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getCurrencyNumb() {
+    public function getCurrencyNumb()
+    {
         $currencyCode = $this->getPayment()->getOrder()->getBaseCurrencyCode();
         if (!$this->_currenciesNumbers) {
             $this->_currenciesNumbers = simplexml_load_file(Mage::getBaseDir() . '/app/code/community/Quadra/Paybox/etc/currency.xml');
@@ -137,7 +140,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return Quadra_Paybox_Model_Question_Number
      */
-    public function getQuestionNumberModel() {
+    public function getQuestionNumberModel()
+    {
         if (!$this->_questionNumberModel) {
             $accountHash = md5($this->getSiteNumber() . $this->getRang());
             $this->_questionNumberModel = Mage::getModel('paybox/question_number')->load($accountHash, 'account_hash');
@@ -150,7 +154,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return string
      */
-    public function getDebugFlag() {
+    public function getDebugFlag()
+    {
         return $this->getConfigData('debug_flag');
     }
 
@@ -159,7 +164,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return double
      */
-    public function getMontant() {
+    public function getMontant()
+    {
         $session = Mage::getSingleton('checkout/session');
         $quote = Mage::getModel('sales/quote')->load($session->getQuoteId());
         if ($quote->getIsMultiShipping()) {
@@ -169,11 +175,12 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
         }
     }
 
-    public function authorize(Varien_Object $payment, $amount) {
+    public function authorize(Varien_Object $payment, $amount)
+    {
         parent::authorize($payment, $amount);
 
         $this->setAmount($amount)
-             ->setPayment($payment);
+                ->setPayment($payment);
 
         if ($this->callDoDirectPayment() !== false) {
             $payment->setStatus(self::STATUS_APPROVED)
@@ -193,11 +200,12 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
         return $this;
     }
 
-    public function capture(Varien_Object $payment, $amount) {
+    public function capture(Varien_Object $payment, $amount)
+    {
         parent::capture($payment, $amount);
 
         $this->setAmount($amount)
-             ->setPayment($payment);
+                ->setPayment($payment);
 
         if ($payment->getLastTransId()) {
             //if after authorize
@@ -224,12 +232,14 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
         return $this;
     }
 
-    public function cancel(Varien_Object $payment) {
+    public function cancel(Varien_Object $payment)
+    {
         $payment->setStatus(self::STATUS_DECLINED);
         return $this;
     }
 
-    public function refund(Varien_Object $payment, $amount) {
+    public function refund(Varien_Object $payment, $amount)
+    {
         parent::refund($payment, $amount);
 
         $error = false;
@@ -267,7 +277,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return bool | array
      */
-    public function callDoDirectPayment() {
+    public function callDoDirectPayment()
+    {
         $payment = $this->getPayment();
         $requestStr = '';
 
@@ -297,7 +308,7 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
         $resultArr = $this->call($requestStr);
 
         $this->getQuestionNumberModel()
-             ->increaseQuestionNumber();
+                ->increaseQuestionNumber();
 
         if ($resultArr === false) {
             return false;
@@ -315,7 +326,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return bool | array
      */
-    public function callDoDebitPayment() {
+    public function callDoDebitPayment()
+    {
 
         $payment = $this->getPayment();
         $requestStr = '';
@@ -355,7 +367,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      *
      * @return bool | array
      */
-    public function callDoRefund() {
+    public function callDoRefund()
+    {
         $payment = $this->getPayment();
         $requestStr = '';
 
@@ -384,7 +397,7 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
         $resultArr = $this->call($requestStr);
 
         $this->getQuestionNumberModel()
-             ->increaseQuestionNumber();
+                ->increaseQuestionNumber();
 
         if ($resultArr === false) {
             return false;
@@ -401,7 +414,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      * @param string $requestStr
      * @return bool | array
      */
-    public function call($requestStr) {
+    public function call($requestStr)
+    {
         if ($this->getDebugFlag()) {
             $debug = Mage::getModel('paybox/api_debug')
                     ->setRequestBody($requestStr)
@@ -438,8 +452,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
 
             //primary gateway is down, need to recall to backup gateway
             if ($parsedResArr['CODEREPONSE'] == '00001' ||
-                $parsedResArr['CODEREPONSE'] == '00097' ||
-                $parsedResArr['CODEREPONSE'] == '00098'
+                    $parsedResArr['CODEREPONSE'] == '00097' ||
+                    $parsedResArr['CODEREPONSE'] == '00098'
             ) {
                 $recallCounter++;
                 $recall = true;
@@ -476,7 +490,8 @@ class Quadra_Paybox_Model_Direct extends Mage_Payment_Model_Method_Cc {
      * @param string $str
      * @return array
      */
-    public function parseResponseStr($str) {
+    public function parseResponseStr($str)
+    {
         $tmpResponseArr = explode('&', $str);
         $responseArr = array();
         foreach ($tmpResponseArr as $response) {
