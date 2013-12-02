@@ -8,31 +8,35 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
-class Quadra_Paybox_Model_Question_Number extends Mage_Core_Model_Abstract {
+class Quadra_Paybox_Model_Question_Number extends Mage_Core_Model_Abstract
+{
     /**
      * Max value of question number
      */
+
     const MAX_QUESTION_NUMBER_VALUE = 2147483647;
 
     protected $_accountHash;
 
-    protected function _construct() {
+    protected function _construct()
+    {
         $this->_init('paybox/question_number');
     }
 
-    public function load($id, $field = null) {
+    public function load($id, $field = null)
+    {
         $this->_accountHash = $id;
         return parent::load($id, $field);
     }
 
-    protected function _afterLoad() {
+    protected function _afterLoad()
+    {
         //need to create new record (with default data) if it first time using of paybox direct
         if (!$this->getAccountHash()) {
             $this->setAccountHash($this->_accountHash);
@@ -55,7 +59,8 @@ class Quadra_Paybox_Model_Question_Number extends Mage_Core_Model_Abstract {
      *
      * @return string
      */
-    public function getNextQuestionNumber() {
+    public function getNextQuestionNumber()
+    {
         $questionNumber = $this->getIncrementValue() + 1;
         return sprintf('%010d', $questionNumber);
     }
@@ -65,7 +70,8 @@ class Quadra_Paybox_Model_Question_Number extends Mage_Core_Model_Abstract {
      *
      * @return Quadra_Paybox_Model_Question_Number
      */
-    public function increaseQuestionNumber() {
+    public function increaseQuestionNumber()
+    {
         $this->setIncrementValue($this->getIncrementValue() + 1)
                 ->save();
         return $this;

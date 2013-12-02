@@ -7,20 +7,19 @@
  * This source file is subject to the Open Software License (OSL 3.0) that is available
  * through the world-wide-web at this URL: http://www.opensource.org/licenses/OSL-3.0
  * If you are unable to obtain it through the world-wide-web, please send an email
- * to ecommerce@quadra-informatique.fr so we can send you a copy immediately.
+ * to modules@quadra-informatique.fr so we can send you a copy immediately.
  *
- *  @author Quadra Informatique <ecommerce@quadra-informatique.fr>
- *  @copyright 1997-2013 Quadra Informatique
- *  @version Release: $Revision: 2.1.5 $
- *  @license http://www.opensource.org/licenses/OSL-3.0  Open Software License (OSL 3.0)
+ * @author Quadra Informatique <modules@quadra-informatique.fr>
+ * @copyright 1997-2013 Quadra Informatique
+ * @license http://www.opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 ?>
 <?php echo $this->htmlEscape($this->getMethod()->getTitle()) ?>
-    {{pdf_row_separator}}
+{{pdf_row_separator}}
 <?php echo Mage::helper('payment')->__('Name on the Card: %s', $this->htmlEscape($this->getInfo()->getCcOwner())) ?>
-    {{pdf_row_separator}}
+{{pdf_row_separator}}
 <?php echo Mage::helper('payment')->__('Credit Card Type: %s', $this->htmlEscape($this->getCcTypeName())) ?>
-    {{pdf_row_separator}}
+{{pdf_row_separator}}
 <?php echo Mage::helper('payment')->__('Credit Card Number: xxxx-%s', $this->htmlEscape($this->getInfo()->getCcLast4())) ?>
-    {{pdf_row_separator}}
+{{pdf_row_separator}}
 <?php echo Mage::helper('payment')->__('Expiration Date: %s/%s', $this->htmlEscape($this->getCcExpMonth()), $this->htmlEscape($this->getInfo()->getCcExpYear())) ?>
