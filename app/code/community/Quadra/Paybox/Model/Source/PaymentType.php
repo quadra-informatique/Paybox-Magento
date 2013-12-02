@@ -25,7 +25,8 @@ class Quadra_Paybox_Model_Source_PaymentType
             array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_SYMPASS, 'label' => Mage::helper('paybox')->__('SYMPASS')),
             array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_PAYNOVA, 'label' => Mage::helper('paybox')->__('PAYNOVA')),
             array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_TERMINEO, 'label' => Mage::helper('paybox')->__('TERMINEO')),
-            array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_PAYPAL, 'label' => Mage::helper('paybox')->__('PAYPAL'))
+            array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_PAYPAL, 'label' => Mage::helper('paybox')->__('PAYPAL')),
+            array('value' => Quadra_Paybox_Model_System::PBX_PAYMENT_TYPE_PREPAYEE, 'label' => Mage::helper('paybox')->__('PREPAYEE'))
         );
     }
 

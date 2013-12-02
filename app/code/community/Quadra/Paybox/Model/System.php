@@ -30,6 +30,7 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract
     const PBX_PAYMENT_TYPE_PAYNOVA = 'PAYNOVA';
     const PBX_PAYMENT_TYPE_TERMINEO = 'TERMINEO';
     const PBX_PAYMENT_TYPE_PAYPAL = 'PAYPAL';
+    const PBX_PAYMENT_TYPE_PREPAYEE = 'PREPAYEE';
     const PBX_CARTE_TYPE_CB = 'CB';
     const PBX_CARTE_TYPE_VISA = 'VISA';
     const PBX_CARTE_TYPE_EUROCARDMASTERCARD = 'EUROCARD_MASTERCARD';
@@ -41,6 +42,7 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract
     const PBX_CARTE_TYPE_PAYNOVA = 'PAYNOVA';
     const PBX_CARTE_TYPE_TERMINEO = 'TERMINEO';
     const PBX_CARTE_TYPE_PAYPAL = 'PAYPAL';
+    const PBX_CARTE_TYPE_MAXICHEQUE = 'MAXICHEQUE';
 
     protected $_code = 'paybox_system';
     protected $_authorized_ips = array('194.2.122.158', '195.101.99.76', '195.25.7.166');
@@ -174,6 +176,9 @@ class Quadra_Paybox_Model_System extends Mage_Payment_Model_Method_Abstract
                 ),
                 self::PBX_PAYMENT_TYPE_PAYPAL => array(
                     self::PBX_CARTE_TYPE_PAYPAL => Mage::helper('paybox')->__('PAYPAL'),
+                ),
+                self::PBX_PAYMENT_TYPE_PREPAYEE => array(
+                    self::PBX_CARTE_TYPE_MAXICHEQUE => Mage::helper('paybox')->__('MAXICHEQUE'),
                 )
             );
         }
