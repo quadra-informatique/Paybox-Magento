@@ -1,0 +1,6 @@
+app/code/community/Quadra/Paybox/ app/code/community/Quadra/Paybox/
+app/design/adminhtml/default/default/template/paybox app/design/adminhtml/default/default/template/paybox
+app/design/frontend/default/default/template/paybox app/design/frontend/default/default/template/paybox
+app/design/frontend/default/default/layout/paybox.xml app/design/frontend/default/default/layout/paybox.xml
+app/etc/modules/Quadra_Paybox.xml app/etc/modules/Quadra_Paybox.xml
+app/locale/fr_FR/Quadra_Paybox.csv app/locale/fr_FR/Quadra_Paybox.csv

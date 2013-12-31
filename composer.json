@@ -1,0 +1,16 @@
+{
+    "name": "quadra/paybox",
+    "homepage": "https://github.com/quadra-informatique/Magento-Module-Paybox",
+    "type": "magento-module",
+    "description": "Le module de paiement Paybox pour Magento 1.4.+ implémente la solution de paiement à distance fournie par Paybox.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Quadra Informatique",
+            "homepage": "http://quadra-informatique.fr"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
