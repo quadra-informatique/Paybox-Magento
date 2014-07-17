@@ -604,7 +604,7 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action
                     if ($this->_createInvoice($order)) {
                         $order->addStatusToHistory($order->getStatus(), $this->__('Invoice was create successfully'));
                     } else {
-                        $order->addStatusToHistory($order->getStatus(), $this->__('Cann\'t create invoice'));
+                        $order->addStatusToHistory($order->getStatus(), $this->__('Can\'t create invoice'));
                     }
                 }
             }
