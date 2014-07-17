@@ -609,10 +609,10 @@ class Quadra_Paybox_SystemController extends Mage_Core_Controller_Front_Action
                 }
             }
 
+            $order->save();
             if (!$order->getEmailSent()) {
                 $order->sendNewOrderEmail();
             }
-            $order->save();
         } else {
             // Si le client a déjà payé on ne fait aucun traitement
             if ($order->getStatus() == $model->getConfigData('order_status_payment_accepted') && $this->getCheckout()->getQuote()->getIsActive() == false) {
